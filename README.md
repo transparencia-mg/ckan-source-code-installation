@@ -73,6 +73,36 @@ pip        21.3.1
 setuptools 44.1.0
 ```
 
+- Após conversa com Gileno resolvemos manter o setup com a versão python3.10.
+- Instalação CKAN versão 2.10-dev:
+
+```
+pip install -e 'git+https://github.com/ckan/ckan.git@dev-v2.10#egg=ckan[requirements]
+deactivate
+. /usr/lib/ckan/default/bin/activate
+```
+
+- Postgres:
+
+```
+sudo service postgresql start
+sudo su - postgres
+createuser -S -D -R -P ckan_default
+createdb -O ckan_default ckan_default -E utf-8
+
+# Para sair do modo interativo postgres:
+exit
+```
+
+- Create a CKAN config file:
+
+```
+sudo mkdir -p /etc/ckan/default
+sudo chown -R `whoami` /etc/ckan/
+```
+
+
+
 
 
 
