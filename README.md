@@ -63,6 +63,16 @@ pip install --upgrade pip
 
 > You can tell when the virtualenv is active because its name appears in front of your shell prompt
 
+- `pip list`:
+
+```
+(default) @gabrielbdornas ➜ ~ $ pip list
+Package    Version
+---------- -------
+pip        21.3.1
+setuptools 44.1.0
+```
+
 
 
 
