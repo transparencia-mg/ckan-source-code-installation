@@ -205,5 +205,74 @@ Para testar basta rodar:
 ckan -c /etc/ckan/default/ckan.ini run
 ```
 
+- Instale o supervisor
+
+```
+sudo apt install supervisor
+```
+`
+- Configurar o supervisor
+
+```
+sudo vi /etc/supervisor/conf.d/ckan.conf
+```
+
+Colocar o seguinte conteúdo neste arquivo:
+
+```
+[program:ckan]
+command=/usr/lib/ckan/default/bin/ckan -c /etc/ckan/default/ckan.ini run
+directory=/usr/lib/ckan/default/src/ckan
+user=codespace
+stdout_logfile=/usr/lib/ckan/default/gunicorn_supervisor_ckan.log
+redirect_stderr=true
+```
+
+Em seguida se faz necessário inicializar o supervisor e carregar o processo do ckan
+
+```
+sudo service supervisor start
+sudo supervisorctl reread
+sudo supervisorctl reload
+```
+
+- Instale e configure o nginx
+
+```
+sudo apt install nginx
+sudo rm /etc/nginx/sites-enabled/default
+sudo vi /etc/nginx/sites-enabled/ckan.conf
+```
+
+Neste arquivo do nginx coloque:
+
+```
+server {
+    listen 80;
+    client_max_body_size 200m;
+    access_log /usr/lib/ckan/default/src/ckan/nginx-access-ckan.log;
+    error_log /usr/lib/ckan/default/src/ckan/nginx-error-ckan.log;
+    location / {
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_redirect off;
+        if (!-f $request_filename) {
+            proxy_pass http://127.0.0.1:5000;
+            break;
+        }
+    }
+}
+```
+
+- Reinicie o nginx
+
+```
+sudo service nginx restart
+```
+
+
+
+
+
 
 
