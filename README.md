@@ -199,30 +199,11 @@ ckan.plugins = ... datapackage_creator
 ckan db upgrade -p datapackage_creator
 ```
 
-- Instale o supervisor e o nginx
+Para testar basta rodar:
 
 ```
-sudo apt install supervisor nginx
+ckan -c /etc/ckan/default/ckan.ini run
 ```
-`
-- Configurar o supervisor
-
-```
-sudo vi /etc/supervisor/conf.d/ckan.conf
-```
-
-Colocar o seguinte conteúdo neste arquivo:
-
-```
-[program:ckan]
-command=/usr/lib/ckan/default/bin/ckan -c /etc/ckan/default/ckan.ini run
-directory=/usr/lib/ckan/default/src/ckan
-user=codespace
-stdout_logfile=/usr/lib/ckan/default/gunicorn_supervisor_ckan.log
-redirect_stderr=true
-```
-
-
 
 
 
