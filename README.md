@@ -7,7 +7,7 @@ Passos seguidos conforme [documentação do CKAN](https://docs.ckan.org/en/2.9/m
 
 ```
 sudo apt-get update
-sudo apt-get install python3-dev postgresql libpq-dev python3-pip python3-venv git-core solr-jetty openjdk-8-jdk redis-server
+sudo apt-get install python3-dev postgresql libpq-dev python3-pip python3-venv git-core openjdk-8-jdk redis-server
 ```
 
 - [Install CKAN into a Python virtual environment](https://docs.ckan.org/en/2.9/maintaining/installing/install-from-source.html#install-ckan-into-a-python-virtual-environment):
@@ -77,7 +77,7 @@ setuptools 44.1.0
 - Instalação CKAN versão 2.10-dev:
 
 ```
-pip install -e 'git+https://github.com/ckan/ckan.git@dev-v2.10#egg=ckan[requirements]
+pip install -e git+https://github.com/ckan/ckan.git@dev-v2.10#egg=ckan[requirements]
 deactivate
 . /usr/lib/ckan/default/bin/activate
 ```
@@ -88,6 +88,7 @@ deactivate
 sudo service postgresql start
 sudo su - postgres
 createuser -S -D -R -P ckan_default
+# irá solicitar senha, utilizamos: ckan_default
 createdb -O ckan_default ckan_default -E utf-8
 
 # Para sair do modo interativo postgres:
@@ -101,10 +102,125 @@ sudo mkdir -p /etc/ckan/default
 sudo chown -R `whoami` /etc/ckan/
 ```
 
+- Create the CKAN config file:
 
+```
+ckan generate config /etc/ckan/default/ckan.ini
+```
 
+- Setup Solr
 
+Baixar a versão binária: [https://solr.apache.org/downloads.html](https://solr.apache.org/downloads.html)
 
+```
+wget https://www.apache.org/dyn/closer.lua/solr/solr/9.1.0/solr-9.1.0.tgz?action=download
+tar -xvzf 'solr-9.1.0.tgz?action=download'
+```
+
+- Criar um novo solr core
+
+```
+./solr-9.1.0/bin/solr start
+./solr-9.1.0/bin/solr create -c ckan
+```
+
+- Alterar o schema do core ckan
+
+```
+cp /usr/lib/ckan/default/src/ckan/ckan/config/solr/schema.xml solr-9.1.0/server/solr/ckan/conf/managed-schema.xml
+```
+
+- Reiniciar o Solr
+
+```
+./solr-9.1.0/bin/solr restart
+```
+
+- Inicializar Redis
+
+```
+sudo service redis-server start
+```
+
+- Configurar o banco dados no ckan.ini
+
+```
+cd /usr/lib/ckan/default/src/ckan
+vi /etc/ckan/default/ckan.ini
+```
+
+Alterar a linha com o `sqlalchemy.url` para ficar como abaixo:
+
+```
+sqlalchemy.url = postgresql://ckan_default:ckan_default@localhost/ckan_default
+```
+
+- Criar as tabelas
+
+```
+ckan -c /etc/ckan/default/ckan.ini db init
+``
+
+- Criar pasta storage e alterar o ckan.ini
+
+```
+mkdir /etc/ckan/default/storage
+vi /etc/ckan/default/ckan.ini
+```
+
+Alterar a senha `ckan.storage_path` para ficar assim:
+
+```
+ckan.storage_path = /etc/ckan/default/storage
+```
+
+- Criar um usuário administrador:
+
+```
+ckan -c /etc/ckan/default/ckan.ini sysadmin add admin
+```
+
+- Instalar o plugin datapackage-creator
+
+```
+pip install ckanext-datapackage-creator
+vi /etc/ckan/default/ckan.ini
+```
+
+Alterar a configuração `ckan.plugins` adicionando no fim o seguinte:
+
+```
+ckan.plugins = ... datapackage_creator
+```
+
+- Crie as tabelas do datapackage_creator
+
+```
+ckan db upgrade -p datapackage_creator
+```
+
+- Instale o supervisor e o nginx
+
+```
+sudo apt install supervisor nginx
+```
+`
+- Configurar o supervisor
+
+```
+sudo vi /etc/supervisor/conf.d/ckan.conf
+```
+
+Colocar o seguinte conteúdo neste arquivo:
+
+```
+[program:ckan]
+command=/usr/lib/ckan/default/bin/ckan -c /etc/ckan/default/ckan.ini run
+directory=/usr/lib/ckan/default/src/ckan
+user=codespace
+stdout_logfile=/usr/lib/ckan/default/gunicorn_supervisor_ckan.log
+redirect_stderr=true
+```
 
 
 
