@@ -196,7 +196,7 @@ ckan.plugins = ... datapackage_creator
 - Crie as tabelas do datapackage_creator
 
 ```
-ckan db upgrade -p datapackage_creator
+ckan -c /etc/ckan/default/ckan.ini datapackage-creator-init-db
 ```
 
 Para testar basta rodar:
