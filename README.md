@@ -159,7 +159,7 @@ sqlalchemy.url = postgresql://ckan_default:ckan_default@localhost/ckan_default
 
 ```
 ckan -c /etc/ckan/default/ckan.ini db init
-``
+```
 
 - Criar pasta storage e alterar o ckan.ini
 
