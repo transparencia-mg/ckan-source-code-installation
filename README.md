@@ -124,6 +124,34 @@ tar -xvzf 'solr-9.1.0.tgz?action=download'
 ./solr-9.1.0/bin/solr create -c ckan
 ```
 
+**caso apareça a msg de erro abaixo no start do solr** 
+````
+# Your current version of Java is too old to run this version of Solr.
+# We found major version 8, using command 'java -version', with response:
+# openjdk version "1.8.0_352"
+# OpenJDK Runtime Environment (build 1.8.0_352-8u352-ga-1~18.04-b08)
+# OpenJDK 64-Bit Server VM (build 25.352-b08, mixed mode)
+
+Please install latest version of Java 11 or set JAVA_HOME properly`:
+````
+
+**comandos para atualizar o JAVA*
+
+````
+$ sudo apt update
+$ sudo apt install default-jdk
+$ sudo apt update
+$ sudo apt install default-jre
+$ sudo add-apt-repository ppa:webupd8team/java
+$ sudo apt update
+$ sudo apt install oracle-java11-installer
+# https://phoenixnap.com/kb/how-to-install-java-ubuntu
+# usar o comando abaixo se o último acima não funcionar (`$ Package oracle-java11-installer is not available, but is referred to by another package.
+This may mean that the package is missing, has been obsoleted, or is only available from another source`)
+$ sudo apt-get install openjdk-11-jdk
+# https://stackoverflow.com/questions/52504825/how-to-install-jdk-11-under-ubuntu
+````
+
 - Alterar o schema do core ckan
 
 ```
