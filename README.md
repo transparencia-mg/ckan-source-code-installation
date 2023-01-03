@@ -255,7 +255,16 @@ user=codespace
 stdout_logfile=/usr/lib/ckan/default/gunicorn_supervisor_ckan.log
 redirect_stderr=true
 ```
+**se utilizando o Vagrant**:
 
+````
+[program:ckan]
+command=/usr/lib/ckan/default/bin/ckan -c /etc/ckan/default/ckan.ini run
+directory=/usr/lib/ckan/default/src/ckan
+user=vagrant
+stdout_logfile=/usr/lib/ckan/default/gunicorn_supervisor_ckan.log
+redirect_stderr=true
+````
 Em seguida se faz necessário inicializar o supervisor e carregar o processo do ckan
 
 ```
