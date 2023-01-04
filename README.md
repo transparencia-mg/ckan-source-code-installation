@@ -307,6 +307,30 @@ server {
 sudo service nginx restart
 ```
 
+## Reiniciar a máquina
+
+```
+# Ativar ambiente
+. /usr/lib/ckan/default/bin/activate
+
+# Iniciar postgres
+sudo service postgresql start
+
+# Iniciar Solr
+./solr-9.1.0/bin/solr start
+
+# Iniciar Redis
+sudo service redis-server start
+
+# Iniciar Supervisor
+sudo service supervisor start
+
+# Iniciar nginx
+sudo service nginx start
+
+# Iniciar CKAN
+ckan -c /etc/ckan/default/ckan.ini run
+```
 
 
 
