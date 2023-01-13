@@ -327,9 +327,6 @@ sudo service supervisor start
 
 # Iniciar nginx
 sudo service nginx start
-
-# Iniciar CKAN
-ckan -c /etc/ckan/default/ckan.ini run
 ```
 
 
