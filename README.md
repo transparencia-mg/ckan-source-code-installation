@@ -313,6 +313,10 @@ sudo service nginx restart
 # Ativar ambiente
 . /usr/lib/ckan/default/bin/activate
 
+# Atualizar pacote ckanext-datapackage-creator (caso necessário)
+# Atualiza para versão mais atual disponível no Pypi 
+pip install -U ckanext-datapackage-creator
+
 # Iniciar postgres
 sudo service postgresql start
 
