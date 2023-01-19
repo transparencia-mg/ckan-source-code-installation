@@ -329,6 +329,9 @@ sudo service redis-server start
 # Iniciar Supervisor
 sudo service supervisor start
 
+# Reiniciar CKAN (Caso alguma biblioteca seja atualizada/modificada no ambiente)
+sudo supervisorctl restart ckan
+
 # Iniciar nginx
 sudo service nginx start
 ```
