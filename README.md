@@ -270,12 +270,34 @@ Alterar a configuração `ckan.plugins` adicionando no fim o seguinte:
 
 ```
 ckan.plugins = ... datapackage_creator
+datapackage_creator = /etc/ckan/default/datapackage_creator.json
 ```
+
+* incluir arquivos de configuração: [vide repositório do plugin](https://github.com/transparencia-mg/ckanext-datapackage-creator#datapackage-creator-configuration)
+
+The plugin allows you to configure which fields of the resource and package are mandatory and/or 'readonly', for this you just need to add a configuration in your INI file.
+
+datapackage_creator = /path/to/datapackage_creator.json
+We suggest that the file path would be /etc/ckan/default/datapackage_creator.json or in the same folder as ckan.ini file.
+
+Configuration example file:
+
+{
+    "package": {
+        "required": [],
+        "readonly": []
+    },
+    "resource": {
+        "required": [],
+        "readonly": []
+    }
+}
 
 - Crie as tabelas do datapackage_creator
 
 ```
-ckan -c /etc/ckan/default/ckan.ini datapackage-creator-init-db
+$ NO_PROXY="*" ckan -c /etc/ckan/default/ckan.ini db init
+$ ckan -c /etc/ckan/default/ckan.ini datapackage-creator-init-db
 ```
 
 Para testar basta rodar:
@@ -284,7 +306,7 @@ Para testar basta rodar:
 ckan -c /etc/ckan/default/ckan.ini run
 ```
 
-- Instale o supervisor
+# Instale o supervisor
 
 ```
 sudo apt install supervisor
