@@ -54,12 +54,24 @@ python3 --version
 
 - Após a instalação do python3.6 continuei seguindo a documentação para finalizar instalação do ambiente virtual e pacotes necessários:
 
+* entre o install e o setuptools = 
+
+````
+pip install --proxy http://<ip_usuariocamg>:<porta>
+````
+(igual ao proxy do git config)
+
 ```
 python3 -m venv /usr/lib/ckan/default
 . /usr/lib/ckan/default/bin/activate
 pip install setuptools==44.1.0
 pip install --upgrade pip
 ```
+* WARNING (proxy?) = retrying/NewConnectionError urllib3 (msg para Diogo)
+
+* versão Ubuntu = 20.04.5 LTS (Focal Fossa)
+
+
 
 > You can tell when the virtualenv is active because its name appears in front of your shell prompt
 
@@ -74,15 +86,38 @@ setuptools 44.1.0
 ```
 
 - Após conversa com Gileno resolvemos manter o setup com a versão python3.10.
-- Instalação CKAN versão 2.10-dev:
 
+# Instalação CKAN versão 2.10-dev:
+
+* configuração global do proxy para o git:
+````
+$ git config --global http://<ip_usuariocamg>:<porta>
+$ git config --list
+````
+
+* configurar o proxy na máquina virtual:
+````
+export HTTP_PROXY=user:pass@my.proxy.server:8080
+source ~/.bash_profile
+echo $HTTP_PROXY
+````
+
+* ativação do ambiente
 ```
-pip install -e git+https://github.com/ckan/ckan.git@dev-v2.10#egg=ckan[requirements]
 deactivate
 . /usr/lib/ckan/default/bin/activate
 ```
 
-- Postgres:
+* clonar o repositório, criar pasta, passar para a branch dev e instalar dependências e ckan via setup.py:
+````
+$ git clone https://github.com/ckan/ckan.git ckan_source
+$ cd ckan_source/
+$ git checkout dev-v2.10
+$ pip install - r requirements.txt
+$ python setup.py install
+````
+
+# Postgres:
 
 ```
 sudo service postgresql start
@@ -91,7 +126,7 @@ createuser -S -D -R -P ckan_default
 # irá solicitar senha, utilizamos: ckan_default
 createdb -O ckan_default ckan_default -E utf-8
 
-# Para sair do modo interativo postgres:
+- Para sair do modo interativo postgres:
 exit
 ```
 
@@ -108,7 +143,7 @@ sudo chown -R `whoami` /etc/ckan/
 ckan generate config /etc/ckan/default/ckan.ini
 ```
 
-- Setup Solr
+# Setup Solr
 
 Baixar a versão binária: [https://solr.apache.org/downloads.html](https://solr.apache.org/downloads.html)
 
@@ -164,7 +199,7 @@ cp /usr/lib/ckan/default/src/ckan/ckan/config/solr/schema.xml solr-9.1.0/server/
 ./solr-9.1.0/bin/solr restart
 ```
 
-- Inicializar Redis
+# Inicializar Redis
 
 ```
 sudo service redis-server start
@@ -208,10 +243,10 @@ ckan.storage_path = /etc/ckan/default/storage
 ckan -c /etc/ckan/default/ckan.ini sysadmin add admin
 ```
 
-- Instalar o plugin datapackage-creator
+# Instalar o plugin datapackage-creator
 
 ```
-pip install ckanext-datapackage-creator
+pip install --proxy http://<ip_usuariocamg>:<porta> ckanext-datapackage-creator
 vi /etc/ckan/default/ckan.ini
 ```
 
