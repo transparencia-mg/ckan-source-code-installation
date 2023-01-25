@@ -158,6 +158,15 @@ tar -xvzf 'solr-9.1.0.tgz?action=download'
 ./solr-9.1.0/bin/solr start
 ./solr-9.1.0/bin/solr create -c ckan
 ```
+* tornar `of` o proxy dentro do arquivo de configuração, pois ele já está no global da máquina virtual:
+````
+$sudo vi /etc/wgetrc
+````
+teste para ver se está rodando
+````
+$ wget http://:localhost:8983/solr
+$ cat ...
+````
 
 **caso apareça a msg de erro abaixo no start do solr** 
 ````
@@ -224,6 +233,12 @@ sqlalchemy.url = postgresql://ckan_default:ckan_default@localhost/ckan_default
 ckan -c /etc/ckan/default/ckan.ini db init
 ```
 
+* workaround = tirar o proxy para rodar a database no ckan.ini (provavelmente, o ckan run do supervisor tb tem que tira o proxy):
+
+````
+$ NO_PROXY="*" ckan -c /etc/ckan/default/ckan.ini db init
+````
+
 - Criar pasta storage e alterar o ckan.ini
 
 ```
@@ -240,7 +255,8 @@ ckan.storage_path = /etc/ckan/default/storage
 - Criar um usuário administrador:
 
 ```
-ckan -c /etc/ckan/default/ckan.ini sysadmin add admin
+$ NO_PROXY="*" ckan -c /etc/ckan/default/ckan.ini db init
+$ ckan -c /etc/ckan/default/ckan.ini sysadmin add admin
 ```
 
 # Instalar o plugin datapackage-creator
