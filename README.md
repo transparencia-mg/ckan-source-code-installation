@@ -430,7 +430,10 @@ sudo supervisorctl restart ckan
 sudo service nginx start
 ```
 
+# when the CSRF Token is missing
 
+## CSRF Protection
+WTF_CSRF_ENABLED = false
 
 
 
