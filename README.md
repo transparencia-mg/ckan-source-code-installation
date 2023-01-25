@@ -322,9 +322,10 @@ Colocar o seguinte conteúdo neste arquivo:
 
 ```
 [program:ckan]
-command=/usr/lib/ckan/default/bin/ckan -c /etc/ckan/default/ckan.ini run
+command= usr/lib/ckan/default/bin/ckan -c /etc/ckan/default/ckan.ini run
+environment=NO_PROXY="*"
 directory=/usr/lib/ckan/default/src/ckan
-user=codespace
+user=<user>
 stdout_logfile=/usr/lib/ckan/default/gunicorn_supervisor_ckan.log
 redirect_stderr=true
 ```
@@ -333,6 +334,7 @@ redirect_stderr=true
 ````
 [program:ckan]
 command=/usr/lib/ckan/default/bin/ckan -c /etc/ckan/default/ckan.ini run
+environment=NO_PROXY="*"
 directory=/usr/lib/ckan/default/src/ckan
 user=vagrant
 stdout_logfile=/usr/lib/ckan/default/gunicorn_supervisor_ckan.log
@@ -359,6 +361,7 @@ Neste arquivo do nginx coloque:
 ```
 server {
     listen 80;
+    server_name projetockan.cge.mg.gov.br;
     client_max_body_size 200m;
     access_log /usr/lib/ckan/default/src/ckan/nginx-access-ckan.log;
     error_log /usr/lib/ckan/default/src/ckan/nginx-error-ckan.log;
@@ -373,8 +376,26 @@ server {
     }
 }
 ```
+- COLOCAR DOMÍNIO NO ckan.ini
+````
+$ sudo vi /etc/ckan/default/ckan.ini
+ckan.site_url = http://projetockan.cge.mg.gov.br/dataset/new
+````
+-  para conferir se o NO_PROXY saiu:
 
-- Reinicie o nginx
+````
+$ sudo supervisorctl status
+````
+depois
+````
+$ sudo supervisorctl reload
+$ sudo supervisorctl status
+$ sudo supervisorctl restart ckan
+````
+
+
+
+- para reiniciar o nginx (se mudar o arquivo de configuração dele)
 
 ```
 sudo service nginx restart
