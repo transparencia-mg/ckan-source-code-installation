@@ -409,7 +409,7 @@ sudo service nginx restart
 
 # Atualizar pacote ckanext-datapackage-creator (caso necessário)
 # Atualiza para versão mais atual disponível no Pypi 
-pip install -U ckanext-datapackage-creator
+pip install --proxy http://<ip_usuariocamg>:<porta> -U ckanext-datapackage-creator
 
 # Iniciar postgres
 sudo service postgresql start
