@@ -7,7 +7,7 @@ Passos seguidos conforme [documentação do CKAN](https://docs.ckan.org/en/2.9/m
 
 ```
 sudo apt-get update
-sudo apt-get install python3-dev postgresql libpq-dev python3-pip python3-venv git-core openjdk-8-jdk redis-server
+sudo apt-get install python3-dev postgresql libpq-dev python3-pip python3-venv git-core openjdk-8-jdk redis-server graphviz
 ```
 
 - [Install CKAN into a Python virtual environment](https://docs.ckan.org/en/2.9/maintaining/installing/install-from-source.html#install-ckan-into-a-python-virtual-environment):
