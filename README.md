@@ -113,7 +113,7 @@ deactivate
 $ git clone https://github.com/ckan/ckan.git ckan_source
 $ cd ckan_source/
 $ git checkout dev-v2.10
-$ pip install - r requirements.txt
+$ pip install -r requirements.txt
 $ python setup.py install
 ````
 
