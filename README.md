@@ -121,12 +121,12 @@ $ python setup.py install
 
 ```
 sudo service postgresql start
-sudo su - postgres
+sudo su postgres
 createuser -S -D -R -P ckan_default
 # irá solicitar senha, utilizamos: ckan_default
 createdb -O ckan_default ckan_default -E utf-8
 
-- Para sair do modo interativo postgres:
+- Para sair do usuario postgres:
 exit
 ```
 
