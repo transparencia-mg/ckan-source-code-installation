@@ -164,7 +164,7 @@ $sudo vi /etc/wgetrc
 ````
 teste para ver se está rodando
 ````
-$ wget http://:localhost:8983/solr
+$ wget http://localhost:8983/solr
 $ cat ...
 ````
 
